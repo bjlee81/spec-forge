@@ -6,7 +6,7 @@
 - **Figma 추출**: Figma API를 통해 노드 데이터를 직접 추출합니다.
 - **스마트 파싱**: 데이터 모델, 필드, 화면 유형(대시보드, 목록, 폼)을 추론합니다.
 - **네이밍 컨벤션**: Figma 이름을 자동으로 변환하여 코드 표준을 준수합니다.
-  - 클래스: `PascalCase` (예: `MyserviceMainDealer`)
+  - 클래스: `PascalCase` (예: `MainDashboard`)
   - 필드: `camelCase` (예: `textArea`)
 - **명세 생성**: OpenAPI 3.0 및 SQL 스키마를 생성합니다.
 - **코드 생성**: 실행 가능한 Spring Boot 3.5.10 애플리케이션을 생성합니다.
@@ -44,7 +44,7 @@
 ## 🏃‍♂️ 사용 방법
 
 ### 빠른 시작 (원클릭 스크립트)
-"MyService Main" 대시보드 생성을 위한 전체 파이프라인을 실행하는 스크립트가 제공됩니다.
+"service Main" 대시보드 생성을 위한 전체 파이프라인을 실행하는 스크립트가 제공됩니다.
 
 ```bash
 ./run-all.sh
@@ -56,7 +56,7 @@
 
 1.  **Figma 데이터 추출**:
     ```bash
-    # 스크립트에 설정된 특정 노드를 추출합니다 (기본값: 'MyService > Main (Dealer)')
+    # 스크립트에 설정된 특정 노드를 추출합니다 (기본값: 'service > Main (user)')
     npx tsx packages/figma-reader/src/extract-node.ts
     ```
 
@@ -64,29 +64,29 @@
     ```bash
     npm run build --workspace=packages/design-parser
     npx tsx packages/design-parser/src/run-parser.ts \
-      "generated/myservice-main/figma-node.json" \
-      "generated/myservice-main/design-ir.json"
+      "generated/service-main/figma-node.json" \
+      "generated/service-main/design-ir.json"
     ```
 
 3.  **명세 생성 (OpenAPI, SQL)**:
     ```bash
     npm run build --workspace=packages/spec-gen
     npx tsx packages/spec-gen/src/run-spec-gen.ts \
-      "generated/myservice-main/design-ir.json" \
-      "generated/myservice-main/specs"
+      "generated/service-main/design-ir.json" \
+      "generated/service-main/specs"
     ```
 
 4.  **백엔드 코드 생성**:
     ```bash
     npm run build --workspace=packages/backend-cli
     npx tsx packages/backend-cli/src/generate-manual.ts \
-      "generated/myservice-main/specs/openapi.json" \
-      "generated/myservice-main/specs/schema.json" \
-      "generated/myservice-main/backend"
+      "generated/service-main/specs/openapi.json" \
+      "generated/service-main/specs/schema.json" \
+      "generated/service-main/backend"
     ```
 
 ## 📂 출력 결과물
-모든 생성 파일은 `generated/myservice-main/` 디렉토리에 저장됩니다:
+모든 생성 파일은 `generated/service-main/` 디렉토리에 저장됩니다:
 - `figma-node.json`: 원본 Figma 데이터
 - `design-ir.json`: 파싱된 중간 표현 데이터
 - `specs/`: OpenAPI (`openapi.json`) 및 SQL (`schema.json`) 명세
@@ -96,7 +96,7 @@
 생성된 백엔드 디렉토리로 이동하여 서버를 실행합니다:
 
 ```bash
-cd generated/myservice-main/backend
+cd generated/service-main/backend
 ./gradlew bootRun
 ```
 서버는 `http://localhost:8080`에서 시작됩니다.

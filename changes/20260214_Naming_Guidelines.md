@@ -25,5 +25,5 @@ The current parser naively sanitizes Figma layer names (e.g., `filter_2`, `text_
 1.  Review `docs/NAMING_CONVENTIONS.md`.
 2.  Re-run `run-parser.ts` and check `design-ir.json`.
 3.  Re-run `run-spec-gen.ts` and check `openapi.json`.
-4.  Re-run `backend-cli` and verify `MyserviceMainDealer.java` and Controller paths.
+4.  Re-run `backend-cli` and verify `serviceMainuser.java` and Controller paths.
 5.  Confirm names like `filter_2` are gone or replaced with meaningful names (or at least cleaner ones).

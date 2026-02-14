@@ -13,7 +13,7 @@ This document outlines the naming standards to be applied when transforming Figm
 - **Source**: Figma Frame/Group names.
 - **Rules**:
   - Remove generic suffixes if redundant (e.g., `Screen`, `Frame` is okay if meaningful, but `Frame 123` is not).
-  - Example: `MyService > Main (Dealer)` -> `MyserviceMainDealer`
+  - Example: `service > Main (user)` -> `serviceMainuser`
   - Example: `User Profile` -> `UserProfile`
 
 ### Fields (Variables)
@@ -30,7 +30,7 @@ This document outlines the naming standards to be applied when transforming Figm
 - **Source**: Entity name.
 - **Rules**:
   - Lowercase, hyphen-separated.
-  - Example: `MyserviceMainDealer` -> `/myservice-main-dealers`
+  - Example: `serviceMainuser` -> `/service-main-users`
   - Example: `UserProfile` -> `/user-profiles`
 
 ### Query Parameters
@@ -43,7 +43,7 @@ This document outlines the naming standards to be applied when transforming Figm
 - **Format**: `snake_case` (pluralized)
 - **Source**: Entity name.
 - **Rules**:
-  - Example: `MyserviceMainDealer` -> `myservice_main_dealers`
+  - Example: `serviceMainuser` -> `service_main_users`
 
 ### Column Names
 - **Format**: `snake_case`

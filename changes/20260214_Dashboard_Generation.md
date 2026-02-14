@@ -4,7 +4,7 @@
 - **Status:** Pending
 
 ## User Request
-"MyService Main (Dealer)" 대시보드 페이지만 우선 진행. 결과물은 별도 폴더에 저장.
+"service Main (user)" 대시보드 페이지만 우선 진행. 결과물은 별도 폴더에 저장.
 
 ## Proposed Changes
 - **packages/figma-reader**:

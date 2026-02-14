@@ -92,7 +92,7 @@ export class OpenAPIGenerator {
         const paths: Record<string, Record<string, PathOperation>> = {};
 
         for (const model of ir.dataModels) {
-            // Use kebab-case for URLs: /myservice-main-dealers
+            // Use kebab-case for URLs: /service-main-users
             const resourceName = this.toKebabCase(model.name);
             const pluralized = this.pluralize(resourceName);
             const basePath = `/${pluralized}`;

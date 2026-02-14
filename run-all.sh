@@ -2,7 +2,7 @@
 set -e
 
 # Configuration
-OUTPUT_DIR="generated/myservice-main"
+OUTPUT_DIR="generated/service-main"
 FIGMA_NODE_JSON="$OUTPUT_DIR/figma-node.json"
 DESIGN_IR_JSON="$OUTPUT_DIR/design-ir.json"
 SPECS_DIR="$OUTPUT_DIR/specs"
@@ -26,7 +26,7 @@ npm run build --workspace=packages/backend-cli
 
 # 1. Extract
 echo "📥 [1/4] Extracting Node from Figma..."
-NODE_ID="9068:200269" # MyService > Main (Dealer)
+NODE_ID="9068:200269" # service > Main (user)
 npx tsx packages/figma-reader/src/extract-node.ts "$NODE_ID" "$FIGMA_NODE_JSON"
 
 # 2. Parse

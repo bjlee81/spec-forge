@@ -23,10 +23,10 @@ The user identified that the generated code (classes, variables, API paths) has 
 -   **Backward Compatibility**: Re-running generation on old `figma-node.json` will produce different file signatures. This is acceptable as we are in the development phase.
 
 ## Verification Steps
-1.  Run `run-parser.ts` on `generated/myservice-main/figma-node.json`.
+1.  Run `run-parser.ts` on `generated/service-main/figma-node.json`.
 2.  Inspect `design-ir.json` for `PascalCase` models and `camelCase` fields.
 3.  Run `run-spec-gen.ts`.
-4.  Inspect `openapi.json` for `/myservice-main-dealers` paths.
-5.  Inspect `schema.json` for `myservice_main_dealers` table.
+4.  Inspect `openapi.json` for `/service-main-users` paths.
+5.  Inspect `schema.json` for `service_main_users` table.
 6.  Run `generate-manual.ts`.
-7.  Check `MyserviceMainDealer.java` for proper class/field names.
+7.  Check `serviceMainuser.java` for proper class/field names.

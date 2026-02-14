@@ -23,16 +23,16 @@ async function main() {
         const dbSchema: DatabaseSchema = JSON.parse(schemaContent);
 
         const config: BackendConfig = {
-            projectName: 'myservice-backend',
+            projectName: 'service-backend',
             language: 'java',
             framework: 'spring-boot',
             database: 'h2', // Using H2 for simple testing
             includeDocker: false,
             includeAuth: false,
             outputDir: outputDir,
-            packageName: 'com.example.myservice',
+            packageName: 'com.example.service',
             groupId: 'com.example',
-            artifactId: 'myservice-backend',
+            artifactId: 'service-backend',
             javaVersion: '17',
             springBootVersion: '3.5.10',
         } as any; // Type assertion since BackendConfig might have exact string types for vars
