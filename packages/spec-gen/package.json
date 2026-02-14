@@ -1,0 +1,19 @@
+{
+    "name": "@figma-codegen/spec-gen",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsup src/index.ts --format esm --dts",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@figma-codegen/design-parser": "*"
+    },
+    "devDependencies": {
+        "js-yaml": "^4.1.0",
+        "@types/js-yaml": "^4.0.9"
+    }
+}
