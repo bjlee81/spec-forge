@@ -10,6 +10,7 @@
   - 필드: `camelCase` (예: `textArea`)
 - **명세 생성**: OpenAPI 3.0 및 SQL 스키마를 생성합니다.
 - **코드 생성**: 실행 가능한 Spring Boot 4.0.2 애플리케이션을 생성합니다.
+- **프론트엔드 프리뷰 생성**: 생성된 백엔드 API와 실제로 통신하며 데이터를 화면 하단 표에 실시간으로 출력하는(MVP Data Verification UI) 시각적 HTML/JS 프리뷰를 생성합니다.
 
 ## 📋 사전 요구사항
 - **Node.js**: v20 이상
@@ -85,12 +86,21 @@
       "generated/service-main/backend"
     ```
 
+5.  **프론트엔드 프리뷰 생성 (MVP 데이터 검증 포함)**:
+    ```bash
+    npm run build --workspace=packages/frontend-gen
+    npx tsx packages/frontend-gen/src/generate-manual.ts \
+      "generated/service-main/design-ir.json" \
+      "generated/service-main/frontend"
+    ```
+
 ## 📂 출력 결과물
 모든 생성 파일은 `generated/service-main/` 디렉토리에 저장됩니다:
 - `figma-node.json`: 원본 Figma 데이터
 - `design-ir.json`: 파싱된 중간 표현 데이터
 - `specs/`: OpenAPI (`openapi.json`) 및 SQL (`schema.json`) 명세
 - `backend/`: 생성된 Spring Boot 프로젝트
+- `frontend/`: 생성된 HTML, CSS, 그리고 데이터 테스트용 `app.js`가 포함된 프리뷰 폴더
 
 ## 🏗️ 생성된 백엔드 실행
 생성된 백엔드 디렉토리로 이동하여 서버를 실행합니다:
