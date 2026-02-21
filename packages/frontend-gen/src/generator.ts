@@ -328,10 +328,22 @@ ${pad}</div>`;
         // 테이블의 로딩 트리거 요소
         return `${pad}<div class="table-container"${styleAttr}>\n${pad}  <table><thead><tr><th>Column</th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table>\n${pad}  <button class="btn" onclick="fetchData('PlaceholderModel')" style="margin-top: 10px;">Load Data</button>\n${pad}</div>`;
       case 'CONTAINER':
+      case 'CARD':
+      case 'HEADER':
+      case 'FOOTER':
+      case 'NAV':
+      case 'ICON':
+      case 'IMAGE':
+        const tag = el.type === 'HEADER' ? 'header' :
+          el.type === 'FOOTER' ? 'footer' :
+            el.type === 'NAV' ? 'nav' : 'div';
+
+        const className = el.type === 'CONTAINER' ? 'container' : el.type.toLowerCase();
+
         if (el.children && el.children.length > 0) {
-          return `${pad}<div class="container"${styleAttr}>\n${this.renderElements(el.children, parseInt(pad.length.toString()) + 2)}\n${pad}</div>`;
+          return `${pad}<${tag} class="${className}"${styleAttr}>\n${this.renderElements(el.children, parseInt(pad.length.toString()) + 2)}\n${pad}</${tag}>`;
         }
-        return '';
+        return `${pad}<${tag} class="${className}"${styleAttr}></${tag}>`;
       default:
         return `${pad}<!-- ${el.type}: ${el.name} -->`;
     }
