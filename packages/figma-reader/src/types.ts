@@ -64,6 +64,7 @@ export interface Paint {
     type: string;
     color?: Color;
     opacity?: number;
+    visible?: boolean;
 }
 
 export interface Color {

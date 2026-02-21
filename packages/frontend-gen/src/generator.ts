@@ -280,37 +280,41 @@ ${elementsHtml}
   }
 
   private renderElement(el: UIElement, pad: string): string {
+    const styleAttr = el.styles && Object.keys(el.styles).length > 0
+      ? ` style="${Object.entries(el.styles).map(([k, v]) => `${k}: ${v}`).join('; ')};"`
+      : '';
+
     switch (el.type) {
       case 'TEXT_INPUT':
-        return `${pad}<div class="form-group">
+        return `${pad}<div class="form-group"${styleAttr}>
 ${pad}  <label>${el.label || el.name}</label>
 ${pad}  <input type="text" placeholder="${el.placeholder || ''}" name="${el.dataField || el.name}">
 ${pad}</div>`;
       case 'TEXT_AREA':
-        return `${pad}<div class="form-group">
+        return `${pad}<div class="form-group"${styleAttr}>
 ${pad}  <label>${el.label || el.name}</label>
 ${pad}  <textarea placeholder="${el.placeholder || ''}" name="${el.dataField || el.name}" rows="4"></textarea>
 ${pad}</div>`;
       case 'SELECT':
-        return `${pad}<div class="form-group">
+        return `${pad}<div class="form-group"${styleAttr}>
 ${pad}  <label>${el.label || el.name}</label>
 ${pad}  <select name="${el.dataField || el.name}"><option>-- 선택 --</option></select>
 ${pad}</div>`;
       case 'CHECKBOX':
-        return `${pad}<div class="form-group">
+        return `${pad}<div class="form-group"${styleAttr}>
 ${pad}  <label><input type="checkbox" name="${el.dataField || el.name}"> ${el.label || el.name}</label>
 ${pad}</div>`;
       case 'BUTTON':
         // 임의의 모델로 save 하도록 유도하는 샘플 onclick 함수
-        return `${pad}<button class="btn" onclick="saveData('PlaceholderModel', { sample: 'data' })">${el.label || el.name}</button>`;
+        return `${pad}<button class="btn"${styleAttr} onclick="saveData('PlaceholderModel', { sample: 'data' })">${el.label || el.name}</button>`;
       case 'LABEL':
-        return `${pad}<p>${el.label || el.name}</p>`;
+        return `${pad}<p${styleAttr}>${el.label || el.name}</p>`;
       case 'TABLE':
         // 테이블의 로딩 트리거 요소
-        return `${pad}<div class="table-container">\n${pad}  <table><thead><tr><th>Column</th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table>\n${pad}  <button class="btn" onclick="fetchData('PlaceholderModel')" style="margin-top: 10px;">Load Data</button>\n${pad}</div>`;
+        return `${pad}<div class="table-container"${styleAttr}>\n${pad}  <table><thead><tr><th>Column</th></tr></thead><tbody><tr><td>Data</td></tr></tbody></table>\n${pad}  <button class="btn" onclick="fetchData('PlaceholderModel')" style="margin-top: 10px;">Load Data</button>\n${pad}</div>`;
       case 'CONTAINER':
         if (el.children && el.children.length > 0) {
-          return `${pad}<div class="container">\n${this.renderElements(el.children, parseInt(pad.length.toString()) + 2)}\n${pad}</div>`;
+          return `${pad}<div class="container"${styleAttr}>\n${this.renderElements(el.children, parseInt(pad.length.toString()) + 2)}\n${pad}</div>`;
         }
         return '';
       default:

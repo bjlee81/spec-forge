@@ -45,6 +45,8 @@ export interface UIElement {
     /** 라벨/플레이스홀더 텍스트 */
     label?: string;
     placeholder?: string;
+    /** 스타일 (CSS 속성 맵) */
+    styles?: Record<string, string>;
     /** 데이터 바인딩 필드 이름 (추론) */
     dataField?: string;
     /** 하위 요소 */

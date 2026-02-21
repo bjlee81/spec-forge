@@ -90,6 +90,7 @@ export class DesignParser {
                 name: child.name,
                 type: elementType,
                 label: child.type === 'TEXT' ? child.characters : undefined,
+                styles: this.inferStyles(child),
                 children: child.children ? this.extractElements(child) : undefined,
             };
 
@@ -145,6 +146,63 @@ export class DesignParser {
         if (name.includes('setting') || name.includes('config') || name.includes('설정')) return 'SETTINGS';
 
         return 'OTHER';
+    }
+
+    /**
+     * 노드 속성으로부터 CSS 스타일을 추출합니다.
+     */
+    private inferStyles(node: FigmaNode): Record<string, string> {
+        const styles: Record<string, string> = {};
+
+        // 1. 레이아웃 & 크기
+        if (node.absoluteBoundingBox) {
+            styles['width'] = `${node.absoluteBoundingBox.width}px`;
+            styles['height'] = `${node.absoluteBoundingBox.height}px`;
+            // 절대 배치 옵션 (부모를 파악하기 어려우므로 relative로 처리하거나 디자인 툴 기반으로 position 정해야하나 일단 크기만)
+        }
+
+        // 2. 색상 (Fills)
+        if (node.fills && node.fills.length > 0) {
+            const fill = node.fills.find(f => f.type === 'SOLID' && f.visible !== false);
+            if (fill && fill.color) {
+                const { r, g, b, a } = fill.color;
+                const opacity = fill.opacity !== undefined ? fill.opacity : (a !== undefined ? a : 1);
+                styles['background-color'] = `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${opacity})`;
+            }
+        }
+
+        // 3. 폰트/텍스트 스타일
+        if (node.type === 'TEXT' && node.style) {
+            if (node.style.fontSize) styles['font-size'] = `${node.style.fontSize}px`;
+            if (node.style.fontWeight) styles['font-weight'] = `${node.style.fontWeight}`;
+            if (node.style.fontFamily) styles['font-family'] = `"${node.style.fontFamily}", sans-serif`;
+            if (node.style.lineHeightPx) styles['line-height'] = `${node.style.lineHeightPx}px`;
+            if (node.style.letterSpacing) styles['letter-spacing'] = `${node.style.letterSpacing}px`;
+
+            if (node.style.textAlignHorizontal) {
+                const alignMap: Record<string, string> = {
+                    'LEFT': 'left',
+                    'CENTER': 'center',
+                    'RIGHT': 'right',
+                    'JUSTIFIED': 'justify'
+                };
+                styles['text-align'] = alignMap[node.style.textAlignHorizontal] || 'left';
+            }
+        }
+
+        // 4. 보더 (Strokes)
+        if (node.strokes && node.strokes.length > 0) {
+            const stroke = node.strokes.find(s => s.type === 'SOLID' && s.visible !== false);
+            if (stroke && stroke.color) {
+                const { r, g, b, a } = stroke.color;
+                const opacity = stroke.opacity !== undefined ? stroke.opacity : (a !== undefined ? a : 1);
+                styles['border'] = `1px solid rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${opacity})`;
+            }
+        }
+
+        // 5. 모서리 곡률 등 모형 (예: radius가 있다면 처리해야 함 - 일단 IR에 radius가 없으면 skip)
+
+        return styles;
     }
 
     /**

@@ -37,7 +37,11 @@ describe('FrontendGenerator', () => {
                         id: 'el-2',
                         name: 'Save',
                         type: 'BUTTON',
-                        label: 'Save Changes'
+                        label: 'Save Changes',
+                        styles: {
+                            'background-color': 'rgba(255, 0, 0, 1)',
+                            'width': '200px'
+                        }
                     }
                 ]
             }
@@ -88,5 +92,6 @@ describe('FrontendGenerator', () => {
         const screenContent = readFileSync(screenHtmlPath, 'utf-8');
         expect(screenContent).toContain('Welcome Dashboard');
         expect(screenContent).toContain('<button class="btn"');
+        expect(screenContent).toContain('style="background-color: rgba(255, 0, 0, 1); width: 200px;"');
     });
 });
