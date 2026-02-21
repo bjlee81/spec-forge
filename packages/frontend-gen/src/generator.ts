@@ -244,31 +244,31 @@ if (Object.keys(endpoints).length > 0) {
   generateScreenHtml(screen: Screen): string {
     const elementsHtml = this.renderElements(screen.elements);
 
-    return `< !DOCTYPE html >
-        <html lang="ko" >
-          <head>
-          <meta charset="UTF-8" >
-            <meta name="viewport" content = "width=device-width, initial-scale=1.0" >
-              <title>${screen.name} </title>
-                < link rel = "stylesheet" href = "styles.css" >
-                  </head>
-                  < body >
-                  <header>
-                  <h1>${screen.name} </h1>
-                    < p > Screen Type: ${screen.screenType} </p>
-                      </header>
-                      < nav > <a href="index.html" >← 목록으로 < /a></nav >
-                        <main>
-                        <div class="screen" >
-                          <h2>${screen.name} </h2>
-                          <div class="screen-canvas">
+    return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${screen.name}</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>${screen.name}</h1>
+    <p>Screen Type: ${screen.screenType}</p>
+  </header>
+  <nav><a href="index.html">← 목록으로</a></nav>
+  <main>
+    <div class="screen">
+      <h2>${screen.name}</h2>
+      <div class="screen-canvas">
 ${elementsHtml}
-                          </div>
       </div>
-        </main>
-        < script src = "app.js" > </script>
-          </body>
-          </html>`;
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>`;
   }
 
   /**
