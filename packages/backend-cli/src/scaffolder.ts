@@ -1,6 +1,6 @@
 import type { OpenAPIDocument } from '@figma-codegen/spec-gen';
 import type { DatabaseSchema } from '@figma-codegen/spec-gen';
-import { writeFile, mkdir, unlink } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, unlink } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -199,6 +199,22 @@ API 문서: http://localhost:8000/docs`,
             await execAsync(`unzip -o ${zipPath} -d ${projectDir}`);
             await unlink(zipPath); // Remove zip file
             console.log('Project downloaded and extracted.');
+
+            // Add springdoc-openapi dependency
+            const buildGradlePath = join(projectDir, 'build.gradle');
+            try {
+                let buildGradle = await readFile(buildGradlePath, 'utf8');
+                if (buildGradle.includes('dependencies {')) {
+                    buildGradle = buildGradle.replace(
+                        'dependencies {',
+                        "dependencies {\n\timplementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'"
+                    );
+                    await writeFile(buildGradlePath, buildGradle);
+                    console.log('Added springdoc dependency.');
+                }
+            } catch (e) {
+                console.warn('Could not update build.gradle with springdoc', e);
+            }
         } catch (error) {
             console.warn('Failed to download from Spring Initializr, falling back to manual generation.', error);
             throw error;
