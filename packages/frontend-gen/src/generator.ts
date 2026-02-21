@@ -176,6 +176,16 @@ main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
 th { background: var(--bg); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+
+/* MVP Data Verification UI */
+.data-verification-container {
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 2px solid var(--border);
+  background: #f9fafb;
+}
+.data-verification-container h3 { margin-bottom: 1rem; font-size: 1.1rem; }
+.data-verification-container table { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 `;
   }
 
@@ -211,10 +221,13 @@ async function fetchData(modelName) {
         if (!response.ok) throw new Error(\`HTTP error! status: \${response.status}\`);
         const data = await response.json();
         console.log('Received data:', data);
+        renderDataTable(modelName, data);
         return data;
     } catch (error) {
         console.error('Fetch failed, using mock data fallback.', error);
-        return mockData[modelName] || [];
+        const fallback = mockData[modelName] || [];
+        renderDataTable(modelName, fallback);
+        return fallback;
     }
 }
 
@@ -236,10 +249,40 @@ async function saveData(modelName, data) {
         if (!response.ok) throw new Error(\`HTTP error! status: \${response.status}\`);
         const result = await response.json();
         console.log('Saved successfully:', result);
+        fetchData(modelName); // Refresh table
         return result;
     } catch (error) {
         console.error('Save failed.', error);
     }
+}
+
+/**
+ * 데이터를 테이블 포맷으로 화면 하단에 렌더링합니다. (MVP Data Verification)
+ */
+function renderDataTable(modelName, dataArray) {
+    const container = document.getElementById('data-verification-container');
+    if (!container) return;
+    
+    if (!dataArray || dataArray.length === 0) {
+        container.innerHTML = \`<h3>Data Verification: \${modelName}</h3><p>No data available.</p>\`;
+        return;
+    }
+
+    const headers = Object.keys(dataArray[0]);
+    let html = \`<h3>Data Verification: \${modelName}</h3><table><thead><tr>\`;
+    headers.forEach(h => html += \`<th>\${h}</th>\`);
+    html += \`</tr></thead><tbody>\`;
+    
+    dataArray.forEach(row => {
+        html += \`<tr>\`;
+        headers.forEach(h => {
+            html += \`<td>\${row[h] !== null && row[h] !== undefined ? String(row[h]) : ''}</td>\`;
+        });
+        html += \`</tr>\`;
+    });
+    
+    html += \`</tbody></table>\`;
+    container.innerHTML = html;
 }
 
 // 초기 로딩 테스트 (존재하는 모델 하나를 임의로 fetch)
@@ -277,6 +320,7 @@ if (Object.keys(endpoints).length > 0) {
 ${elementsHtml}
       </div>
     </div>
+    <div id="data-verification-container" class="data-verification-container"></div>
   </main>
   <script src="app.js"></script>
 </body>
