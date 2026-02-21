@@ -181,20 +181,21 @@ export class DesignParser {
 
         // 3. 폰트/텍스트 스타일
         if (node.type === 'TEXT' && node.style) {
-            if (node.style.fontSize) styles['font-size'] = `${node.style.fontSize}px`;
-            if (node.style.fontWeight) styles['font-weight'] = `${node.style.fontWeight}`;
-            if (node.style.fontFamily) styles['font-family'] = `"${node.style.fontFamily}", sans-serif`;
-            if (node.style.lineHeightPx) styles['line-height'] = `${node.style.lineHeightPx}px`;
-            if (node.style.letterSpacing) styles['letter-spacing'] = `${node.style.letterSpacing}px`;
+            const fontStyle = node.style as Record<string, any>;
+            if (fontStyle.fontSize) styles['font-size'] = `${fontStyle.fontSize}px`;
+            if (fontStyle.fontWeight) styles['font-weight'] = `${fontStyle.fontWeight}`;
+            if (fontStyle.fontFamily) styles['font-family'] = `"${fontStyle.fontFamily}", sans-serif`;
+            if (fontStyle.lineHeightPx) styles['line-height'] = `${fontStyle.lineHeightPx}px`;
+            if (fontStyle.letterSpacing) styles['letter-spacing'] = `${fontStyle.letterSpacing}px`;
 
-            if (node.style.textAlignHorizontal) {
+            if (fontStyle.textAlignHorizontal) {
                 const alignMap: Record<string, string> = {
                     'LEFT': 'left',
                     'CENTER': 'center',
                     'RIGHT': 'right',
                     'JUSTIFIED': 'justify'
                 };
-                styles['text-align'] = alignMap[node.style.textAlignHorizontal] || 'left';
+                styles['text-align'] = alignMap[fontStyle.textAlignHorizontal] || 'left';
             }
         }
 
