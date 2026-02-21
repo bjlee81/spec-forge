@@ -23,6 +23,7 @@ echo "📦 Building packages..."
 npm run build --workspace=packages/design-parser
 npm run build --workspace=packages/spec-gen
 npm run build --workspace=packages/backend-cli
+npm run build --workspace=packages/frontend-gen
 
 # 1. Extract
 echo "📥 [1/4] Extracting Node from Figma..."
@@ -38,11 +39,17 @@ echo "📝 [3/4] Generating Specifications..."
 npx tsx packages/spec-gen/src/run-spec-gen.ts "$DESIGN_IR_JSON" "$SPECS_DIR"
 
 # 4. Code Gen
-echo "💻 [4/4] Generating Spring Boot Backend..."
+echo "💻 [4/5] Generating Spring Boot Backend..."
 npx tsx packages/backend-cli/src/generate-manual.ts \
     "$SPECS_DIR/openapi.json" \
     "$SPECS_DIR/schema.json" \
     "$BACKEND_DIR"
+
+# 5. Frontend Gen
+echo "🎨 [5/5] Generating Frontend Preview..."
+npx tsx packages/frontend-gen/src/run-frontend-gen.ts \
+    "$DESIGN_IR_JSON" \
+    "$OUTPUT_DIR/frontend"
 
 echo "=================================================="
 echo "✅ Pipeline Completed Successfully!"
