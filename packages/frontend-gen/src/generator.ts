@@ -138,14 +138,17 @@ main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 .screen h2 { font-size: 1.25rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary); }
 .screen-canvas { position: relative; width: 100%; min-height: 1000px; background: transparent; }
 
-.form-group { margin-bottom: 1rem; }
-.form-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; font-size: 0.9rem; }
+.form-group { margin-bottom: 1rem; pointer-events: auto; }
+.form-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; font-size: 0.9rem; pointer-events: none; }
 .form-group input, .form-group textarea, .form-group select {
   width: 100%;
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   font-size: 0.9rem;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .btn {
@@ -157,9 +160,18 @@ main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
   border-radius: var(--radius);
   cursor: pointer;
   font-size: 0.9rem;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
 }
 
 .btn:hover { background: var(--primary-hover); }
+
+/* Ensure overlapping absolute containers do not block clicks */
+.container { pointer-events: none; }
+.container > * { pointer-events: auto; }
+.screen-canvas * { pointer-events: none; }
+.screen-canvas input, .screen-canvas select, .screen-canvas textarea, .screen-canvas button, .screen-canvas .table-container, .screen-canvas .form-group { pointer-events: auto; }
 
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
