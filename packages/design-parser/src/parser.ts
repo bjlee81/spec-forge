@@ -32,7 +32,7 @@ export class DesignParser {
             screens.push({
                 id: document.id,
                 name: document.name,
-                elements: this.extractElements(document),
+                elements: this.extractElements(document, document.absoluteBoundingBox?.x || 0, document.absoluteBoundingBox?.y || 0),
                 screenType: this.inferScreenType(document),
             });
             return screens;
@@ -47,7 +47,7 @@ export class DesignParser {
                         screens.push({
                             id: frame.id,
                             name: frame.name,
-                            elements: this.extractElements(frame),
+                            elements: this.extractElements(frame, frame.absoluteBoundingBox?.x || 0, frame.absoluteBoundingBox?.y || 0),
                             screenType: this.inferScreenType(frame),
                         });
                     }
@@ -63,7 +63,7 @@ export class DesignParser {
                             screens.push({
                                 id: frame.id,
                                 name: frame.name,
-                                elements: this.extractElements(frame),
+                                elements: this.extractElements(frame, frame.absoluteBoundingBox?.x || 0, frame.absoluteBoundingBox?.y || 0),
                                 screenType: this.inferScreenType(frame),
                             });
                         }
@@ -78,7 +78,7 @@ export class DesignParser {
     /**
      * 노드에서 UI 요소를 재귀적으로 추출합니다.
      */
-    private extractElements(node: FigmaNode): UIElement[] {
+    private extractElements(node: FigmaNode, parentX: number = 0, parentY: number = 0): UIElement[] {
         const elements: UIElement[] = [];
 
         if (!node.children) return elements;
@@ -90,8 +90,8 @@ export class DesignParser {
                 name: child.name,
                 type: elementType,
                 label: child.type === 'TEXT' ? child.characters : undefined,
-                styles: this.inferStyles(child),
-                children: child.children ? this.extractElements(child) : undefined,
+                styles: this.inferStyles(child, parentX, parentY),
+                children: child.children ? this.extractElements(child, child.absoluteBoundingBox?.x || parentX, child.absoluteBoundingBox?.y || parentY) : undefined,
             };
 
             // 입력 필드인 경우 데이터 필드 이름 추론
@@ -151,14 +151,17 @@ export class DesignParser {
     /**
      * 노드 속성으로부터 CSS 스타일을 추출합니다.
      */
-    private inferStyles(node: FigmaNode): Record<string, string> {
+    private inferStyles(node: FigmaNode, parentX: number = 0, parentY: number = 0): Record<string, string> {
         const styles: Record<string, string> = {};
+
+        styles['position'] = 'absolute';
 
         // 1. 레이아웃 & 크기
         if (node.absoluteBoundingBox) {
             styles['width'] = `${node.absoluteBoundingBox.width}px`;
             styles['height'] = `${node.absoluteBoundingBox.height}px`;
-            // 절대 배치 옵션 (부모를 파악하기 어려우므로 relative로 처리하거나 디자인 툴 기반으로 position 정해야하나 일단 크기만)
+            styles['left'] = `${node.absoluteBoundingBox.x - parentX}px`;
+            styles['top'] = `${node.absoluteBoundingBox.y - parentY}px`;
         }
 
         // 2. 색상 (Fills)
@@ -167,7 +170,12 @@ export class DesignParser {
             if (fill && fill.color) {
                 const { r, g, b, a } = fill.color;
                 const opacity = fill.opacity !== undefined ? fill.opacity : (a !== undefined ? a : 1);
-                styles['background-color'] = `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${opacity})`;
+                const colorStr = `rgba(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}, ${opacity})`;
+                if (node.type === 'TEXT') {
+                    styles['color'] = colorStr;
+                } else {
+                    styles['background-color'] = colorStr;
+                }
             }
         }
 

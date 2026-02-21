@@ -136,6 +136,7 @@ main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 
 .screen { background: var(--surface); border-radius: var(--radius); padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 .screen h2 { font-size: 1.25rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--primary); }
+.screen-canvas { position: relative; width: 100%; min-height: 1000px; background: transparent; }
 
 .form-group { margin-bottom: 1rem; }
 .form-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; font-size: 0.9rem; }
@@ -169,10 +170,10 @@ th { background: var(--bg); font-weight: 600; font-size: 0.85rem; text-transform
   generateJS(ir: DesignIR): string {
     const mockData = this.generateMockData(ir);
 
-    // 백엔드 API 엔드포인트 매핑 생성 (소문자 복수형 변환)
+    // 백엔드 API 엔드포인트 매핑 생성 (kebab-case 복수형 변환)
     const endpoints: Record<string, string> = {};
     for (const model of ir.dataModels) {
-      endpoints[model.name] = `/api/v1/${this.pluralize(model.name.toLowerCase())}`;
+      endpoints[model.name] = `/api/v1/${this.pluralize(this.toKebabCase(model.name))}`;
     }
 
     return `// Auto-generated JavaScript
@@ -260,7 +261,9 @@ if (Object.keys(endpoints).length > 0) {
                         <main>
                         <div class="screen" >
                           <h2>${screen.name} </h2>
+                          <div class="screen-canvas">
 ${elementsHtml}
+                          </div>
       </div>
         </main>
         < script src = "app.js" > </script>
@@ -356,6 +359,13 @@ ${pad}</div>`;
       .toLowerCase()
       .replace(/[^a-z0-9가-힣]+/g, '-')
       .replace(/^-|-$/g, '');
+  }
+
+  private toKebabCase(str: string): string {
+    return str
+      .replace(/([a-z])([A-Z])/g, "$1-$2")
+      .replace(/[\s_]+/g, '-')
+      .toLowerCase();
   }
 
   private pluralize(name: string): string {
