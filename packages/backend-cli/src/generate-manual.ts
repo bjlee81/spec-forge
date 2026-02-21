@@ -34,7 +34,7 @@ async function main() {
             groupId: 'com.example',
             artifactId: 'service-backend',
             javaVersion: '17',
-            springBootVersion: '3.5.10',
+            springBootVersion: '4.0.2',
         } as any; // Type assertion since BackendConfig might have exact string types for vars
 
         const scaffolder = new BackendScaffolder();

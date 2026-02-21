@@ -9,7 +9,7 @@
   - 클래스: `PascalCase` (예: `MainDashboard`)
   - 필드: `camelCase` (예: `textArea`)
 - **명세 생성**: OpenAPI 3.0 및 SQL 스키마를 생성합니다.
-- **코드 생성**: 실행 가능한 Spring Boot 3.5.10 애플리케이션을 생성합니다.
+- **코드 생성**: 실행 가능한 Spring Boot 4.0.2 애플리케이션을 생성합니다.
 
 ## 📋 사전 요구사항
 - **Node.js**: v20 이상
