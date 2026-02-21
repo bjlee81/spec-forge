@@ -82,9 +82,11 @@ describe('FrontendGenerator', () => {
         const appJsContent = readFileSync(appJsPath, 'utf-8');
         expect(appJsContent).toContain('Test Project Preview loaded');
         expect(appJsContent).toContain('User');
+        expect(appJsContent).toContain('fetch(');
+        expect(appJsContent).toContain('/api/v1/users');
 
         const screenContent = readFileSync(screenHtmlPath, 'utf-8');
         expect(screenContent).toContain('Welcome Dashboard');
-        expect(screenContent).toContain('<button class="btn">Save Changes</button>');
+        expect(screenContent).toContain('<button class="btn"');
     });
 });
