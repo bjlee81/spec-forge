@@ -1,0 +1,25 @@
+{
+    "name": "figma-codegen-cli",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "bin": {
+        "figma-codegen": "dist/index.js"
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format esm --dts",
+        "clean": "rm -rf dist"
+    },
+    "dependencies": {
+        "@figma-codegen/figma-reader": "*",
+        "@figma-codegen/design-parser": "*",
+        "@figma-codegen/frontend-gen": "*",
+        "@figma-codegen/spec-gen": "*",
+        "@figma-codegen/backend-cli": "*",
+        "commander": "^12.1.0",
+        "@inquirer/prompts": "^7.2.0",
+        "chalk": "^5.3.0",
+        "ora": "^8.0.1"
+    },
+    "devDependencies": {}
+}
